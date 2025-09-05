@@ -4,7 +4,7 @@ import ChequesDetail from '../views/ChequesDetail.vue'
 import Buildings from '../views/Buildings.vue'
 import Apartments from '../views/Apartments.vue'
 import Login from '../views/Login.vue'
-
+import { authStore } from '../store/auth' 
 const routes = [
   {
     path: '/login',
@@ -48,8 +48,7 @@ const router = createRouter({
 
 // Navigation guard for authentication
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
-  
+  const isAuthenticated = authStore.isAuthenticated 
   // If not authenticated and trying to access protected route, redirect to login
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login')

@@ -27,7 +27,7 @@
           
           <div class="flex items-center space-x-4">
             <div class="text-sm text-gray-500">
-              {{ currentDate }}
+             
             </div>
             <button
               @click="handleLogout"
@@ -73,14 +73,16 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed  } from 'vue'
 import { useRouter } from 'vue-router'
 import { format } from 'date-fns'
+import { authStore } from './store/auth'
 
 export default {
   name: 'App',
   setup() {
     const router = useRouter()
+
     
     const navigation = ref([
       { name: 'Dashboard', href: '/' },
@@ -92,14 +94,10 @@ export default {
       return format(new Date(), 'EEEE, MMMM do, yyyy')
     })
 
-    const isAuthenticated = computed(() => {
-      return localStorage.getItem('isAuthenticated') === 'true'
-    })
+  
 
     const handleLogout = () => {
-      // Clear authentication data
-      localStorage.removeItem('isAuthenticated')
-      localStorage.removeItem('user')
+       authStore.logout()
       
       // Redirect to login
       router.push('/login')
@@ -108,7 +106,7 @@ export default {
     return {
       navigation,
       currentDate,
-      isAuthenticated,
+      isAuthenticated: computed(() => authStore.isAuthenticated),
       handleLogout
     }
   }

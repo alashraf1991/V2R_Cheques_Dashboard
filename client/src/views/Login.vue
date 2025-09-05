@@ -85,7 +85,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-
+import { authStore } from '../store/auth'
 export default {
   name: 'Login',
   setup() {
@@ -116,10 +116,8 @@ export default {
         })
         
         if (response.data.success) {
-          // Store authentication token/user info
-          localStorage.setItem('isAuthenticated', 'true')
-          localStorage.setItem('user', JSON.stringify(response.data.user))
-          
+       
+          authStore.login({ name: JSON.stringify(response.data.user) }) 
           // Redirect to dashboard
           router.push('/')
         } else {

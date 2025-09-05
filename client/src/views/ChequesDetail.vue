@@ -183,6 +183,7 @@
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Building</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Apartment</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cheque No</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bank</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
             </tr>
@@ -201,6 +202,11 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ cheque.ChequeNo }}
               </td>
+
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ cheque.BankName }}
+              </td>
+
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ formatCurrency(cheque.Amount) }}
               </td>
