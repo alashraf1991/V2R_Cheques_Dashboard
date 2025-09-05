@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS Test - V2R Cheques Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 CORS Test - V2R Cheques Dashboard</h1>
+        <p>This page tests the CORS configuration of your backend API.</p>
+        
+        <div class="test-section">
+            <h3>🔍 Test CORS Configuration</h3>
+            <p>Click the button below to test if CORS is working properly:</p>
+            <button onclick="testCORS()">Test CORS</button>
+            <div id="corsResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🏢 Test Buildings API</h3>
+            <p>Test the buildings endpoint:</p>
+            <button onclick="testBuildings()">Test Buildings API</button>
+            <div id="buildingsResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🏠 Test Apartments API</h3>
+            <p>Test the apartments endpoint:</p>
+            <button onclick="testApartments()">Test Apartments API</button>
+            <div id="apartmentsResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Test Health Check</h3>
+            <p>Test the health endpoint:</p>
+            <button onclick="testHealth()">Test Health API</button>
+            <div id="healthResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>⚙️ Configuration</h3>
+            <div class="info">
+                <strong>Frontend URL:</strong> https://hamdan.v2r.systems<br>
+                <strong>Backend URL (HTTP):</strong> http://5.104.107.109:3000<br>
+                <strong>Backend URL (HTTPS):</strong> https://5.104.107.109:3443<br>
+                <strong>New API Domain:</strong> https://system.v2r.ae<br>
+                <strong>Test Date:</strong> <span id="testDate"></span>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔒 Test HTTPS Backend</h3>
+            <p>Test the HTTPS backend endpoint:</p>
+            <button onclick="testHTTPS()">Test HTTPS Backend</button>
+            <div id="httpsResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🌐 Test New API Domain</h3>
+            <p>Test the new API domain:</p>
+            <button onclick="testNewDomain()">Test system.v2r.ae</button>
+            <div id="newDomainResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Set test date
+        document.getElementById('testDate').textContent = new Date().toLocaleString();
+
+        const API_BASE = 'http://5.104.107.109:3000';
+
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${type}`;
+        }
+
+        async function testCORS() {
+            try {
+                showResult('corsResult', 'Testing CORS...', 'info');
+                
+                const response = await fetch(`${API_BASE}/api/cors-test`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult('corsResult', 
+                        `✅ CORS Test Successful!\n\nResponse:\n${JSON.stringify(data, null, 2)}`, 
+                        'success'
+                    );
+                } else {
+                    showResult('corsResult', 
+                        `❌ CORS Test Failed!\n\nStatus: ${response.status}\nStatus Text: ${response.statusText}`, 
+                        'error'
+                    );
+                }
+            } catch (error) {
+                showResult('corsResult', 
+                    `❌ CORS Test Error!\n\nError: ${error.message}`, 
+                    'error'
+                );
+            }
+        }
+
+        async function testBuildings() {
+            try {
+                showResult('buildingsResult', 'Testing Buildings API...', 'info');
+                
+                const response = await fetch(`${API_BASE}/api/buildings`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult('buildingsResult', 
+                        `✅ Buildings API Test Successful!\n\nResponse:\n${JSON.stringify(data, null, 2)}`, 
+                        'success'
+                    );
+                } else {
+                    showResult('buildingsResult', 
+                        `❌ Buildings API Test Failed!\n\nStatus: ${response.status}\nStatus Text: ${response.statusText}`, 
+                        'error'
+                    );
+                }
+            } catch (error) {
+                showResult('buildingsResult', 
+                    `❌ Buildings API Test Error!\n\nError: ${error.message}`, 
+                    'error'
+                );
+            }
+        }
+
+        async function testApartments() {
+            try {
+                showResult('apartmentsResult', 'Testing Apartments API...', 'info');
+                
+                const response = await fetch(`${API_BASE}/api/apartments`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult('apartmentsResult', 
+                        `✅ Apartments API Test Successful!\n\nResponse:\n${JSON.stringify(data, null, 2)}`, 
+                        'success'
+                    );
+                } else {
+                    showResult('apartmentsResult', 
+                        `❌ Apartments API Test Failed!\n\nStatus: ${response.status}\nStatus Text: ${response.statusText}`, 
+                        'error'
+                    );
+                }
+            } catch (error) {
+                showResult('apartmentsResult', 
+                    `❌ Apartments API Test Error!\n\nError: ${error.message}`, 
+                    'error'
+                );
+            }
+        }
+
+        async function testHealth() {
+            try {
+                showResult('healthResult', 'Testing Health API...', 'info');
+                
+                const response = await fetch(`${API_BASE}/health`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult('healthResult', 
+                        `✅ Health API Test Successful!\n\nResponse:\n${JSON.stringify(data, null, 2)}`, 
+                        'success'
+                    );
+                } else {
+                    showResult('healthResult', 
+                        `❌ Health API Test Failed!\n\nStatus: ${response.status}\nStatus Text: ${response.statusText}`, 
+                        'error'
+                    );
+                }
+            } catch (error) {
+                showResult('healthResult', 
+                    `❌ Health API Test Error!\n\nError: ${error.message}`, 
+                    'error'
+                );
+            }
+        }
+
+        async function testHTTPS() {
+            try {
+                showResult('httpsResult', 'Testing HTTPS Backend...', 'info');
+                
+                const httpsAPI = 'https://5.104.107.109:3443';
+                const response = await fetch(`${httpsAPI}/api/cors-test`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult('httpsResult', 
+                        `✅ HTTPS Backend Test Successful!\n\nResponse:\n${JSON.stringify(data, null, 2)}`, 
+                        'success'
+                    );
+                } else {
+                    showResult('httpsResult', 
+                        `❌ HTTPS Backend Test Failed!\n\nStatus: ${response.status}\nStatus Text: ${response.statusText}`, 
+                        'error'
+                    );
+                }
+            } catch (error) {
+                showResult('httpsResult', 
+                    `❌ HTTPS Backend Test Error!\n\nError: ${error.message}`, 
+                    'error'
+                );
+            }
+        }
+
+        async function testNewDomain() {
+            try {
+                showResult('newDomainResult', 'Testing New API Domain...', 'info');
+                
+                const newDomainAPI = 'https://system.v2r.ae';
+                const response = await fetch(`${newDomainAPI}/api/cors-test`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult('newDomainResult', 
+                        `✅ New Domain Test Successful!\n\nResponse:\n${JSON.stringify(data, null, 2)}`, 
+                        'success'
+                    );
+                } else {
+                    showResult('newDomainResult', 
+                        `❌ New Domain Test Failed!\n\nStatus: ${response.status}\nStatus Text: ${response.statusText}`, 
+                        'error'
+                    );
+                }
+            } catch (error) {
+                showResult('newDomainResult', 
+                    `❌ New Domain Test Error!\n\nError: ${error.message}`, 
+                    'error'
+                );
+            }
+        }
+    </script>
+</body>
+</html>

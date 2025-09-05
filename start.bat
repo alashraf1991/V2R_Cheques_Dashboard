@@ -1,0 +1,9 @@
+@echo off
+echo Starting V2R Cheques Dashboard...
+echo.
+echo Installing dependencies...
+call npm run install-all
+echo.
+echo Starting development server...
+call npm run dev
+pause
